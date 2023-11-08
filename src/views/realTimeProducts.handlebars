@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página de Productos en Tiempo Real</title>
+</head>
+<body>
+    <h1>Listado de Productos en Tiempo Real</h1>
+    <ul id="product-list">
+        {{#each food}}
+            <li>
+                <p>{{this.name}}</p>
+                <p>Precio: ${{this.price}}</p>
+            </li>
+        {{/each}}
+    </ul>
+
+    <!-- JavaScript para manejar WebSockets -->
+    <script>
+        const socket = io();
+
+        socket.on('foodList', (updatedFoodList) => {
+           
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = ''; 
+            updatedFoodList.forEach((foodItem) => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <p>${foodItem.name}</p>
+                    <p>Precio: $${foodItem.price}</p>
+                `;
+                productList.appendChild(listItem);
+            });
+        });
+    </script>
+</body>
+</html>
